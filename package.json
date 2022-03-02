@@ -1,0 +1,16 @@
+{
+  "name": "strapi-generator",
+  "version": "1.0.0",
+  "repository": "https://github.com/skynocover/strapi-generater.git",
+  "bin": {
+    "strapi-generator": "./src/index.mjs"
+  },
+  "scripts": {
+    "start": "node src/index.mjs"
+  },
+  "author": "EricWu <skynocover@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^9.0.0"
+  }
+}

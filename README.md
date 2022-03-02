@@ -1,5 +1,9 @@
 # strapi-generater
 
+```
+yarn add -D https://github.com/skynocover/strapi-generater
+```
+
 ## 必填
 
 - a: api的名稱

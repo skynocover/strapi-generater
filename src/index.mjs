@@ -2,26 +2,21 @@
 
 import fs from 'fs';
 import fsPromises from 'fs/promises';
-import { Command } from 'commander/esm.mjs';
+import inquirer from 'inquirer';
+import chalk from 'chalk';
+import figlet from 'figlet';
 
-const program = new Command();
-
-program.option('-a, --api <apiName>', 'strapi api name', null);
-program.option(
-  '-s, --select <gp | p | l | r>',
-  'choose generate global policy or policy or lifecycle or route',
-  null,
-);
-program.option('-n, --name <name>', 'name of file', 'temp');
-program.option('-r, --route <route name>', 'route', 'temp');
-
-program.parse();
-
-const apiName = program.opts().api; // api 名稱
-const select = program.opts().select; // 選擇產生 policy 或 global policy或 lifecycle或 route
-const name = program.opts().name; // policy名稱
-const route = program.opts().route; // lifecycle的方法, policy的route對象, route的路徑
-
+const helloWord = () => {
+  console.log(
+    chalk.green(
+      figlet.textSync('Strapi Generator', {
+        font: 'ANSI Shadow',
+        horizontalLayout: 'default',
+        verticalLayout: 'default',
+      }),
+    ),
+  );
+};
 class Api {
   #apiName;
   #select;
@@ -115,7 +110,7 @@ class Api {
         const configTemp2 = configTemp1.substring(0, configTemp1.lastIndexOf('},'));
         const config = configTemp2
           .substring(0, configTemp2.lastIndexOf('}'))
-          .trimRight()
+          .trimEnd()
           .replace(/,$/g, '');
 
         const fixedJSON = !config
@@ -128,12 +123,12 @@ class Api {
 
         const fixconfig = JSON.parse(fixedJSON);
 
-        if (!fixconfig.config[route]) {
-          fixconfig.config[route] = {
+        if (!fixconfig.config[this.#route]) {
+          fixconfig.config[this.#route] = {
             policies: [`${this.#select === 'gp' ? 'global::' : ''}${this.#name}`],
           };
         } else {
-          fixconfig.config[route].policies.push(
+          fixconfig.config[this.#route].policies.push(
             `${this.#select === 'gp' ? 'global::' : ''}${this.#name}`,
           );
         }
@@ -170,21 +165,111 @@ class Api {
   }
 }
 
+const defaultQuestions = () => {
+  const questions = [
+    {
+      type: 'input',
+      name: 'apiName',
+      message: 'What is the name of API?',
+    },
+    {
+      type: 'list',
+      name: 'select',
+      message: 'Choose the content to generate',
+      choices: ['global policy', 'api policy', 'lifecycle', 'route'],
+      filter: (val) => {
+        switch (val) {
+          case 'global policy':
+            return 'gp';
+          case 'api policy':
+            return 'p';
+          case 'lifecycle':
+            return 'l';
+          case 'route':
+            return 'r';
+        }
+      },
+    },
+  ];
+  return inquirer.prompt(questions);
+};
+
+const routeQuestion = (select) => {
+  switch (select) {
+    case 'p':
+    case 'gp':
+      return inquirer.prompt([
+        {
+          type: 'list',
+          name: 'route',
+          message: 'Choose core route',
+          choices: ['create', 'find', 'findOne', 'update', 'delete'],
+        },
+      ]);
+    case 'l':
+      return inquirer.prompt([
+        {
+          type: 'list',
+          name: 'route',
+          message: 'Choose lifecycle events',
+          pageSize: 18,
+          choices: [
+            'beforeCreate',
+            'beforeCreateMany',
+            'afterCreate',
+            'afterCreateMany',
+            'beforeUpdate',
+            'beforeUpdateMany',
+            'afterUpdate',
+            'afterUpdateMany',
+            'beforeDelete',
+            'beforeDeleteMany',
+            'afterDelete',
+            'afterDeleteMany',
+            'beforeCount',
+            'afterCount',
+            'beforeFindOne',
+            'afterFindOne',
+            'beforeFindMany',
+            'afterFindMany',
+          ],
+        },
+      ]);
+    case 'r':
+      return inquirer.prompt([
+        {
+          type: 'input',
+          name: 'route',
+          message: 'Please Input Custom Route',
+        },
+      ]);
+  }
+};
+
+const policyNameQuestion = (select) => {
+  if (select === 'p' || select === 'gp') {
+    return inquirer.prompt([
+      {
+        type: 'input',
+        name: 'name',
+        message: 'Please Input Policy Name',
+      },
+    ]);
+  }
+  return { name: '' };
+};
+
 (async () => {
+  helloWord();
+
+  const { apiName, select } = await defaultQuestions();
   if (!apiName) {
-    console.error('Please specify apiName');
+    console.error('Please input apiName!');
     return;
   }
 
-  if (!select) {
-    console.error('Please choose generate policy or lifecycle, eg: -s p or -s l');
-    return;
-  }
-
-  if (select !== 'gp' && select !== 'p' && select !== 'l' && select !== 'r') {
-    console.error('Wrong select, please choose gp or p or l');
-    return;
-  }
+  const { route } = await routeQuestion(select);
+  const { name } = await policyNameQuestion(select);
 
   const api = new Api({ apiName, select, name, route });
 

@@ -11,6 +11,8 @@
   "author": "EricWu <skynocover@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "commander": "^9.0.0"
+    "chalk": "^2.4.1",
+    "figlet": "^1.2.0",
+    "inquirer": "^6.0.0"
   }
 }

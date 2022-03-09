@@ -4,36 +4,22 @@
 yarn add -D https://github.com/skynocover/strapi-generater
 ```
 
-## 必填
+## Interface
 
-- a: api的名稱
-- s: 選擇要產生的內容
-  - gp: global policy
-  - p: policy
-  - l: lifecycle
-  - r: route
+![info](assets/info.png)
 
-## Policy
+### What is the name of API
 
-```
-yarn generator -a sub-grade -s p -n check-grade -r create  
-```
+> api 名稱,應該與資料夾路徑相同
 
-- n: policy的名稱
-- r: 要使用這個policy的route
+### Choose the content to generate
 
-## Lifecycle
+> 選擇要產生的內容
 
-```
-yarn generator -a subpoena -s l -r beforeUpdate
-```
+- global policy, 全域policy
+- api policy, 指定單一api的policy
+- lifecycle, 指定單一api的lifecycle
+- route, 產生custom api route
 
-- r: lifecycle的名稱
+![content](assets/content.png)
 
-## Route
-
-```
-yarn generator -a subpoena -s r -r batchUpdating
-```
-
-- r: 要產生的route的路徑

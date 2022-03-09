@@ -175,7 +175,7 @@ const defaultQuestions = () => {
     {
       type: 'list',
       name: 'select',
-      message: 'Choose the content to generate',
+      message: 'Choose the content to generate:',
       choices: ['global policy', 'api policy', 'lifecycle', 'route'],
       filter: (val) => {
         switch (val) {
@@ -202,7 +202,7 @@ const routeQuestion = (select) => {
         {
           type: 'list',
           name: 'route',
-          message: 'Choose core route',
+          message: 'Choose core route:',
           choices: ['create', 'find', 'findOne', 'update', 'delete'],
         },
       ]);
@@ -211,7 +211,7 @@ const routeQuestion = (select) => {
         {
           type: 'list',
           name: 'route',
-          message: 'Choose lifecycle events',
+          message: 'Choose lifecycle events:',
           pageSize: 18,
           choices: [
             'beforeCreate',

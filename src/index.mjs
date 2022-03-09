@@ -121,19 +121,19 @@ class Api {
               .replaceAll('051c33579aa4f', 'global::')
               .replaceAll(`'`, `"`);
 
-        const fixconfig = JSON.parse(fixedJSON);
+        const fixConfig = JSON.parse(fixedJSON);
 
-        if (!fixconfig.config[this.#route]) {
-          fixconfig.config[this.#route] = {
+        if (!fixConfig.config[this.#route]) {
+          fixConfig.config[this.#route] = {
             policies: [`${this.#select === 'gp' ? 'global::' : ''}${this.#name}`],
           };
         } else {
-          fixconfig.config[this.#route].policies.push(
+          fixConfig.config[this.#route].policies.push(
             `${this.#select === 'gp' ? 'global::' : ''}${this.#name}`,
           );
         }
 
-        return obj[0] + splitWord + `',${JSON.stringify(fixconfig)})`;
+        return obj[0] + splitWord + `',${JSON.stringify(fixConfig)})`;
 
       case 'l':
         const currentLifecycle = content.substring(0, content.lastIndexOf('}'));

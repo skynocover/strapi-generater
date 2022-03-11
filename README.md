@@ -10,7 +10,7 @@ yarn add -D https://github.com/skynocover/strapi-generater
 
 ### What is the name of API
 
-> api 名稱,應該與資料夾路徑相同
+> api 名稱, 使用arrow key挑選
 
 ### Choose the content to generate
 

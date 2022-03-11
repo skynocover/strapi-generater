@@ -165,12 +165,17 @@ class Api {
   }
 }
 
-const defaultQuestions = () => {
+const defaultQuestions = async () => {
+  const apis = (await fsPromises.readdir('src/api', { withFileTypes: true }))
+    .filter((item) => item.isDirectory())
+    .map((item) => item.name);
+
   const questions = [
     {
-      type: 'input',
+      type: 'list',
       name: 'apiName',
       message: 'What is the name of API?',
+      choices: apis,
     },
     {
       type: 'list',

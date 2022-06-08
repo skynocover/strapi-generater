@@ -4,6 +4,18 @@
 yarn add -D https://github.com/skynocover/strapi-generater
 ```
 
+## script
+
+```js
+"scripts": {
+    "dev": "strapi develop",
+    "start": "strapi start",
+    "build": "strapi build",
+    "strapi": "strapi",
+    "generator": "strapi-generator"
+},
+```
+
 ## Interface
 
 ![info](assets/info.png)
